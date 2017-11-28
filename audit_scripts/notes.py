@@ -3,8 +3,8 @@
 # Use: Extract and check links in note.notes. Write retrieved URL and HTTP response codes to outfile. Retrieved url is empty string if connection failed.
 
 # Update
-datafile = 'notes_prod_20171023.tsv'
-outfile = 'notes_audit_prod_20171023.tsv'
+datafile = 'notes_prod_20171127.tsv'
+outfile = 'notes_audit_prod_20171127.tsv'
 
 import json
 import re
@@ -15,10 +15,12 @@ href = re.compile(r'href=\"[^"]*\"')
 # Read urls in notes into data.
 data = []
 with open(datafile, 'r') as f:
-    f.next()
+    headers = f.next().strip('\r\n').split('\t')
     for line in f:
+        row = line.strip('\r\n').split('\t')
+        r = row[:4]
         s = ''
-        note = json.loads(line.strip('\r\n'))
+        note = json.loads(row[4].strip('\r\n'))
         keys = note.keys()
         if 'content' in keys:
             content = note['content']
@@ -56,17 +58,18 @@ with open(datafile, 'r') as f:
                             for l in item['label']:
                                 s += l
         for match in href.finditer(s):
-            data.append(match.group()[6:-1])
+            d = r + [match.group()[6:-1]]
+            data.append(d)
 
 # Check urls. Write output.
 out = open(outfile, 'w')
-output = 'url' + '\t' + 'retrieved_url' + '\t' + 'http_response_code' + '\n'
+headers += ['retrieved_url', 'http_response_code']
+output = '\t'.join(headers) + '\n'
 out.write(output)
-for url in data:
-    response = check_url(url, 5)
-    retrieved_url = response[0]
-    http_response_code = str(response[1])
-    output = url + '\t' + retrieved_url + '\t' + http_response_code + '\n'
+for row in data:
+    response = check_url(row[4], 5)
+    row += response
+    output = '\t'.join(map(lambda x: str(x), row)) + '\n'
     out.write(output)
 out.close()
 
