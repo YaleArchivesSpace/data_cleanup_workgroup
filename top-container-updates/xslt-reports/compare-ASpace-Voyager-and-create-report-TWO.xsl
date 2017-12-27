@@ -88,13 +88,13 @@ try out streaming with xslt3's source-document ???
                 to do that in Oracle 10 without being able to write new functions to the database
                 and i only have read access-->
             <bib-id>
-                <xsl:value-of select="string-join(distinct-values($voyager-match/row/BIB_ID))"/>
+                <xsl:value-of select="string-join(distinct-values($voyager-match/row/BIB_ID), '; ')"/>
             </bib-id>
             <mfhd-id>
-                <xsl:value-of select="string-join(distinct-values($voyager-match/row/MFHD_ID))"/>
+                <xsl:value-of select="string-join(distinct-values($voyager-match/row/MFHD_ID), '; ')"/>
             </mfhd-id>
             <item-id>
-                <xsl:value-of select="string-join(distinct-values($voyager-match/ITEM_ID))"/>
+                <xsl:value-of select="string-join(distinct-values($voyager-match/ITEM_ID), '; ')"/>
             </item-id>
             <repository>
                 <xsl:value-of select="name[2]"/>
