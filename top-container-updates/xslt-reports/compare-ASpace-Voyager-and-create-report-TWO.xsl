@@ -94,7 +94,7 @@ try out streaming with xslt3's source-document ???
                 <xsl:value-of select="string-join(distinct-values($voyager-match/row/MFHD_ID), '; ')"/>
             </mfhd-id>
             <item-id>
-                <xsl:value-of select="string-join(distinct-values($voyager-match/ITEM_ID), '; ')"/>
+                <xsl:value-of select="string-join(distinct-values($voyager-match/row/ITEM_ID), '; ')"/>
             </item-id>
             <repository>
                 <xsl:value-of select="name[2]"/>
